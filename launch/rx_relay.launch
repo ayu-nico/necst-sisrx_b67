@@ -3,7 +3,7 @@
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/relay_conf/sis_power_ch1_reader.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/sis_power_ch1_reader.conf" />
   </node>
 
 </launch>
