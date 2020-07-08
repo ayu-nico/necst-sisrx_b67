@@ -28,11 +28,8 @@ class magnet_current(object):
 
 #データ保存
     def measure(self, initv, interval, repeat):
-        self.da_all=[]
         for i in range(repeat+1):
-            da = []
             in_vol = (initv+interval*i)/100
-            data = in_vol
             self.pub1.publish(in_vol)
             time.sleep(0.3)
         self.pub1.publish(0)
@@ -42,15 +39,13 @@ class magnet_current(object):
 
 if __name__ == "__main__" :
     rospy.init_node("measure")
-    ctrl = sis_iv()
     initv = 5
     interval = 0.05
     repeat = 500
     date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-    file_name = "sis_iv" + '/' + date + '.necstdb'
+    file_name = "magnet_current" + '/' + date + '.necstdb'
     print(file_name)
     logger = core_controller.logger()
     logger.start(file_name)
     ctrl.measure(initv,interval,repeat)
     logger.stop()
-    ctrl.plot()
