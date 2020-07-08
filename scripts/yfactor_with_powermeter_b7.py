@@ -24,7 +24,8 @@ class sis_iv(object):
         self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch2",Float64,queue_size=1)
         self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch3",Float64,self.stock_data1)
         self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch4",Float64,self.stock_data2)
-        
+        self.sub3 = rospy.Subscriber("/dev/cpz3177/rsw0/ch10",Float64,self.stock_data3)
+
         #self.vol = np.nan
         #self.cur = np.nan
         self.path = "/home/telescopio/data_konishi/"
@@ -42,23 +43,25 @@ class sis_iv(object):
 #データ保存
     def measure(self, initv, interval, repeat):
         self.da_all=[]
+        self.pub1.publish(initv/3)
+        time.sleep(2)
         for i in range(repeat+1):
             da = []
             in_vol = (initv+interval*i)/3
             data = in_vol
             self.pub1.publish(in_vol)
-            time.sleep(0.3)
+            time.sleep(2.0)
             da.append(self.vol/0.2)
             da.append(self.cur/0.002)
             print(da)
             self.da_all.append(da)
             time.sleep(0.01)
-        self.pub1.publish(0)    
+        self.pub1.publish(0)
         #print((da_all[-1][1]-da_all[0][1])/(da_all[-1][0]-da_all[0][0])) 傾き
-        np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
+        #np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
 
 #データプロット
-    
+
     def plot(self):
         da_all = np.array(self.da_all)
         fig = plt.figure()
@@ -68,35 +71,20 @@ class sis_iv(object):
         ax.set_ylabel("current[uA]")
         ax.set_title("SIS-IV")
         ax.grid(True)
-        plt.savefig(self.path + "sis_iv_{}.png".format(self.ut))
+        plt.savefig(self.path + "yfactor_with_powermeter_b7_{}.png".format(self.ut))
         plt.show()
-    """ 
-    def plot(self):
-        da_all = np.array(self.da_all)
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.plot(da_all[:,0], da_all[:,1])
-        ax.set_xlabel("voltage[mV]")
-        ax.set_ylabel("current[uA]")
-        ax.set_title("SIS-IV")
-        ax.grid(True)
-        plt.savefig(self.path + "sis_iv_1.png".format(self.ut))
-        plt.show()
-    """
-
 
 if __name__ == "__main__" :
     rospy.init_node("measure")
     ctrl = sis_iv()
-    initv = -3
+    initv = -3.4
     interval = 0.05
     repeat = 120
     date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-    file_name = "sis_iv" + '/' + date + '.necstdb'
+    file_name = "yfactor_with_powermeter_b7" + '/' + date + '.necstdb'
     print(file_name)
     logger = core_controller.logger()
     logger.start(file_name)
     ctrl.measure(initv,interval,repeat)
     logger.stop()
     ctrl.plot()
-
