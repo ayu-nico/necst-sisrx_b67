@@ -4,9 +4,10 @@ name = 'sis_v_set'
 
 import sys
 import rospy
+import std_msgs.msg
 
 b = 6
-sis_v = 4.5 #mv
+sis_v = 4.3 #mv
 
 
 ##################
