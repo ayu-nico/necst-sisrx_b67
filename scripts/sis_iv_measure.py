@@ -21,9 +21,9 @@ class sis_iv(object):
 
 
     def __init__(self):
-        self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch1",Float64,queue_size=1)
-        self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch1",Float64,self.stock_data1)
-        self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch2",Float64,self.stock_data2)
+        self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch2",Float64,queue_size=1)
+        self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch3",Float64,self.stock_data1)
+        self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch4",Float64,self.stock_data2)
         
         #self.vol = np.nan
         #self.cur = np.nan
@@ -48,7 +48,7 @@ class sis_iv(object):
             data = in_vol
             self.pub1.publish(in_vol)
             time.sleep(0.3)
-            da.append(self.vol/0.4)
+            da.append(self.vol/0.2)
             da.append(self.cur/0.002)
             print(da)
             self.da_all.append(da)
@@ -88,9 +88,9 @@ class sis_iv(object):
 if __name__ == "__main__" :
     rospy.init_node("measure")
     ctrl = sis_iv()
-    initv = -8
+    initv = -3
     interval = 0.05
-    repeat = 320
+    repeat = 120
     date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
     file_name = "sis_iv" + '/' + date + '.necstdb'
     print(file_name)
