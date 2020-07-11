@@ -77,9 +77,9 @@ class sis_iv(object):
 if __name__ == "__main__" :
     rospy.init_node("measure")
     ctrl = sis_iv()
-    initv = -3.5
+    initv = -2.4
     interval = 0.05
-    repeat = 140
+    repeat = 96
     date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
     file_name = "sis_iv_b7" + '/' + date + '.necstdb'
     print(file_name)
