@@ -42,6 +42,8 @@ class sis_iv(object):
 #データ保存
     def measure(self, initv, interval, repeat):
         self.da_all=[]
+        self.pub1.publish(initv/3)
+        time.sleep(3)
         for i in range(repeat+1):
             da = []
             in_vol = (initv+interval*i)/3
@@ -70,15 +72,14 @@ class sis_iv(object):
         ax.grid(True)
         plt.savefig(self.path + "sis_iv_{}.png".format(self.ut))
         plt.show()
-    """
 
 
 if __name__ == "__main__" :
     rospy.init_node("measure")
     ctrl = sis_iv()
-    initv = -3
+    initv = -3.5
     interval = 0.05
-    repeat = 120
+    repeat = 140
     date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
     file_name = "sis_iv_b7" + '/' + date + '.necstdb'
     print(file_name)

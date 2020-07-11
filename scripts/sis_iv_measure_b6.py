@@ -42,6 +42,8 @@ class sis_iv(object):
 #データ保存
     def measure(self, initv, interval, repeat):
         self.da_all=[]
+        self.pub1.publish(initv/3)
+        time.sleep(3)
         for i in range(repeat+1):
             da = []
             in_vol = (initv+interval*i)/3
@@ -74,11 +76,11 @@ class sis_iv(object):
 if __name__ == "__main__" :
     rospy.init_node("measure")
     ctrl = sis_iv()
-    initv = -3
+    initv = -8
     interval = 0.05
-    repeat = 120
+    repeat = 320
     date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-    file_name = "sis_iv_b6" + '/' + date + '.necstdb'
+    file_name = 'sis_iv_b6' + '/' + date + '.necstdb'
     print(file_name)
     logger = core_controller.logger()
     logger.start(file_name)
