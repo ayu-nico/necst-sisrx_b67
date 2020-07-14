@@ -54,7 +54,6 @@ class sis_iv(object):
             da.append(self.cur/0.002)
             print(da)
             self.da_all.append(da)
-            time.sleep(0.01)
         self.pub1.publish(0)
         #print((da_all[-1][1]-da_all[0][1])/(da_all[-1][0]-da_all[0][0])) 傾き
         np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
