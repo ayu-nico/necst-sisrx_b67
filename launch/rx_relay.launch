@@ -1,45 +1,81 @@
 <launch>
-  <node name = "sis_power_reader"
+  <node name = "coil_b7_dsb_v_wirter"
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/node_conf/sis_power_ch1_reader.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/coil_b7_dsb_v_wirter.conf" />
   </node>
-  <node name = "sis_b6_v_writer"
+  <node name = "sis_b6_usb_v_reader"
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_v_wirter.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_usb_v_reader.conf" />
   </node>
-  <node name = "sis_b6_v_reader"
+  <node name = "sis_b6_usb_v_wirter"
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_v_reader.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_usb_v_wirter.conf" />
   </node>
-  <node name = "sis_b7_v_writer"
+  <node name = "sis_b6_usb_i_reader"
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/node_conf/sis_b7_v_wirter.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_usb_i_reader.conf" />
   </node>
-  <node name = "sis_b7_v_reader"
+  <node name = "sis_b6_usb_p_reader"
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/node_conf/sis_b7_v_reader.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_usb_p_reader.conf" />
   </node>
-  <node name = "sis_b6_i_reader"
+  <node name = "sis_b6_lsb_v_reader"
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_i_reader.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_lsb_v_reader.conf" />
   </node>
-  <node name = "sis_b7_i_reader"
+  <node name = "sis_b6_lsb_v_wirter"
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/node_conf/sis_b7_i_reader.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_lsb_v_wirter.conf" />
+  </node>
+  <node name = "sis_b6_lsb_i_reader"
+        type = "relay.py"
+        pkg = "necst-sisrx_b67">
+    <param name = "config_file"
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_lsb_i_reader.conf" />
+  </node>
+  <node name = "sis_b6_lsb_p_reader"
+        type = "relay.py"
+        pkg = "necst-sisrx_b67">
+    <param name = "config_file"
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_lsb_p_reader.conf" />
+  </node>
+  <node name = "sis_b7_dsb_v_reader"
+        type = "relay.py"
+        pkg = "necst-sisrx_b67">
+    <param name = "config_file"
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b7_dsb_v_reader.conf" />
+  </node>
+  <node name = "sis_b7_dsb_v_wirter"
+        type = "relay.py"
+        pkg = "necst-sisrx_b67">
+    <param name = "config_file"
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b7_dsb_v_wirter.conf" />
+  </node>
+  <node name = "sis_b7_dsb_i_reader"
+        type = "relay.py"
+        pkg = "necst-sisrx_b67">
+    <param name = "config_file"
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b7_dsb_i_reader.conf" />
+  </node>
+  <node name = "sis_b7_dsb_p_reader"
+        type = "relay.py"
+        pkg = "necst-sisrx_b67">
+    <param name = "config_file"
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b7_dsb_p_reader.conf" />
   </node>
 
 </launch>

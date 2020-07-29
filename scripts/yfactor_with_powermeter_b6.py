@@ -17,81 +17,66 @@ from std_msgs.msg import Int32
 from std_msgs.msg import Float64
 
 
-class sis_iv(object):
-
+class yfactor_b6(object):
 
     def __init__(self):
-        self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch1",Float64,queue_size=1)
-        self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch1",Float64,self.stock_data1)
-        self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch2",Float64,self.stock_data2)
-        self.sub3 = rospy.Subscriber("/dev/cpz3177/rsw0/ch10",Float64,self.stock_data3)
+        self.lsb = rospy.Publisher("/necst/sisrxb67/sis_b6/lsb/v_cmd",Float64,queue_size=1)
+        self.usb = rospy.Publisher("/necst/sisrxb67/sis_b6/usb/v_cmd",Float64,queue_size=1)
 
-        #self.vol = np.nan
-        #self.cur = np.nan
-        self.path = "/home/telescopio/data_konishi/"
+        date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
+        file_name = "yfactor_with_powermeter_b6" + '/' + date + '.necstdb'
+        print(file_name)
+        self.logger = core_controller.logger()
 
-        self.t = datetime.datetime.now()
-        self.ut = self.t.strftime("%Y%m%d-%H%M%S")
-
-#データ用意する
-    def stock_data1(self,vol):
-        self.vol = vol.data
-
-    def stock_data2(self,cur):
-        self.cur = cur.data
-
-    def stock_data3(self,p):
-        self.p = p.data
-
-#データ保存
-    def measure(self, initv, interval, repeat):
-        self.da_all=[]
-        self.pub1.publish(initv/3)
-        time.sleep(2)
+    def measure_lsb(self, initv, interval, repeat):
+        self.lsb.publish(initv)
+        time.sleep(3)
+        self.logger.start(file_name)
         for i in range(repeat+1):
-            da = []
-            in_vol = (initv+interval*i)/3
-            data = in_vol
-            self.pub1.publish(in_vol)
+            vol = (initv+interval*i)
+            self.lsb.publish(vol)
             time.sleep(0.3)
-            da.append(self.vol/0.2)
-            da.append(self.cur/0.002)
-            da.append(10**(self.p/10))
-            print(da)
-            self.da_all.append(da)
-            time.sleep(0.01)
-        self.pub1.publish(0)
-        #print((da_all[-1][1]-da_all[0][1])/(da_all[-1][0]-da_all[0][0])) 傾き
-        #np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
+        self.logger.stop()
+        self.lsb.publish(0)
 
-#データプロット
+    def measure_usb(self, initv, interval, repeat):
+        self.usb.publish(initv)
+        time.sleep(3)
+        self.logger.start(file_name)
+        for i in range(repeat+1):
+            vol = (initv+interval*i)
+            self.usb.publish(vol)
+            time.sleep(0.3)
+        self.logger.stop()
+        self.usb.publish(0)
 
-    def plot(self):
-        da_all = np.array(self.da_all)
-        fig = plt.figure()
-        ax1 = fig.add_subplot(111)
-        ax1.plot(da_all[:,0], da_all[:,1], marker=".", color="k")
-        ax1.set_xlabel("voltage[mV]")
-        ax1.set_ylabel("current[uA]")
-        ax1.set_title("SIS-IV")
-        ax1.grid(True)
-        ax2 = ax1.twinx(da_all[:,0], da_all[:,2], color="r")
-        ax2.plot()
-        plt.savefig(self.path + "yfactor_with_powermeter_b6_{}.png".format(self.ut))
-        plt.show()
-
+    def measure_2sb(self, initv, interval, repeat):
+        self.lsb.publish(initv)
+        self.usb.publish(initv)
+        time.sleep(3)
+        self.logger.start(file_name)
+        for i in range(repeat+1):
+            vol = (initv+interval*i)
+            self.lsb.publish(vol)
+            self.usb.publish(vol)
+            time.sleep(0.3)
+        self.logger.stop()
+        self.lsb.publish(0)
+        self.usb.publish(0)
 
 if __name__ == "__main__" :
     rospy.init_node("measure")
-    ctrl = sis_iv()
-    initv = -3.4
+
+    mode = "lsb" #lsb or usb or 2sb
+    initv = -8
     interval = 0.05
-    repeat = 120
-    date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-    file_name = "yfactor_with_powermeter_b6" + '/' + date + '.necstdb'
-    print(file_name)
-    logger = core_controller.logger()
-    logger.start(file_name)
-    ctrl.measure(initv,interval,repeat)
-    logger.stop()
-    ctrl.plot()
+    end_v = 8
+
+    repeat = (end_v-initv)/interval
+    ctrl = yfactor_b6()
+    if mode == "lsb":
+        ctrl.measure_lsb(initv,interval,repeat)
+    elif mode == "usb":
+        ctrl.measure_usb(initv,interval,repeat)
+    elif mode == "2sb":
+        ctrl.measure_2sb(initv,interval,repeat)

@@ -19,43 +19,40 @@ from std_msgs.msg import Float64
 
 class magnet_current(object):
 
-
     def __init__(self):
-        self.pub1 = rospy.Publisher("/dev/pmx18/ip_192_168_100_175/volt_cmd",Float64,queue_size=1)
-        self.pub2 = rospy.Publisher("/dev/cpz340816/rsw0/ch2",Float64,queue_size=1)
-        self.t = datetime.datetime.now()
-        self.ut = self.t.strftime("%Y%m%d-%H%M%S")
+        self.coil = rospy.Publisher("/necst/sisrxb67/sis_b7/coil/v_cmd",Float64, queue_size=1)
+        self.dsb  = rospy.Publisher("/necst/sisrxb67/sis_b7/dsb/v_cmd" ,Float64, queue_size=1)
 
-
+        date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
+        self.file_name = "magnet_current" + '/' + date + '.necstdb'
+        print(self.file_name)
+        self.logger = core_controller.logger()
 
     def sis_set_v(self,offset,v=0):
-        vol = (v+offset)/3
-        self.pub2.publish(vol)
+        vol = (v+offset)
+        self.dsb.publish(vol)
 
     def measure(self, initv, interval, repeat):
-        self.pub1.publish(initv/100)
+        self.coil.publish(initv)
         time.sleep(3)
+        self.logger.start(self.file_name)
         for i in range(repeat+1):
-            in_vol = (initv+interval*i)/100
-            self.pub1.publish(in_vol)
+            in_vol = (initv+interval*i)
+            self.coil.publish(in_vol)
             time.sleep(1)
-        self.pub1.publish(0)
-
-
-
+        logger.stop()
+        self.coil.publish(0)
 
 if __name__ == "__main__" :
     rospy.init_node("measure")
+
     initv = 0
+    end_v = 20
     interval = 0.05
-    repeat = 400
-    offset = 0
+    sisv = 0
+
+    repeat = (end_v-initv)/interval
     ctrl = magnet_current()
-    date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-    file_name = "magnet_current" + '/' + date + '.necstdb'
-    print(file_name)
-    logger = core_controller.logger()
-    ctrl.sis_set_v(offset)
-    logger.start(file_name)
+
+    ctrl.sis_set_v(sisv)
     ctrl.measure(initv,interval,repeat)
-    logger.stop()
