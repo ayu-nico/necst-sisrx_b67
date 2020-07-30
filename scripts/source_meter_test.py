@@ -26,21 +26,16 @@ class source(object):
         time.sleep(3)
 
 
-    def iv_publisher(self,ch=0):
-        while not rospy.is_shutdown():
-            try:
-                #self.com.open()
+    def iv_publisher(self):
+            for i in range(repeat+1):
                 self.com.send(":READ?")
-                time.sleep(0.5)
+                time.sleep(0.2)
                 data = self.com.readline().strip().split(",")
                 print(data)
                 self.pub_v.publish(float(data[0]))
                 self.pub_i.publish(float(data[1]))
-                #self.com.close()
-                time.sleep(0.5)
-            except:
-                pass
-            continue
+                time.sleep(0.1)
+                continue
 
     def start_thread(self):
         th = threading.Thread(target=self.iv_publisher)
