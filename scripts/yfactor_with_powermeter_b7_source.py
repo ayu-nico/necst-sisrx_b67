@@ -46,7 +46,7 @@ class sis_b7_iv(object):
             print(data)
             self.pub_v.publish(float(data[0]))
             self.pub_i.publish(float(data[1]))
-            time.sleep(0.2)
+            time.sleep(0.3)
             continue
         logger.stop()
 
