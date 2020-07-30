@@ -58,7 +58,7 @@ if __name__ == '__main__':
     end_v = 3
     interval = 0.05
 
-    repeat = (end_v-initv)/interval
+    repeat = int((end_v-initv)/interval)
 
     iv = sis_b7_iv()
     iv.iv_measure(initv,interval,repeat)
