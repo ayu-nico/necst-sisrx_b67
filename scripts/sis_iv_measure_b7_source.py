@@ -1,8 +1,9 @@
 #! /usr/bin/env python3
 
-name = "source_gpib"
+name = "sis_iv_b7"
 
 import time
+import datetime
 import sys
 import ogameasure
 import rospy
