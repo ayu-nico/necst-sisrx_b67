@@ -54,9 +54,9 @@ class sis_b7_iv(object):
 if __name__ == '__main__':
     rospy.init_node(name)
 
-    initv = -2.4 #mV
-    end_v = 2.4
-    interval = 0.05
+    initv = 2.4 #mV
+    end_v = -2.4
+    interval = -0.05
 
     repeat = int((end_v-initv)/interval)
 
