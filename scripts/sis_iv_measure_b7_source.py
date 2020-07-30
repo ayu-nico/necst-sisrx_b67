@@ -39,9 +39,9 @@ class sis_b7_iv(object):
 
         for i in range(repeat+1):
             self.com.send(":SOUR:VOLT:LEV " + str((initv+interval*i)/1000))
-            time.sleep(0.2)
+            time.sleep(0.3)
             self.com.send(":READ?")
-            time.sleep(0.2)
+            time.sleep(0.3)
             data = self.com.readline().strip().split(",")
             print(data)
             self.pub_v.publish(float(data[0]))
