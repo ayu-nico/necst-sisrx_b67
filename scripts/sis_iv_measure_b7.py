@@ -8,6 +8,7 @@ import os,datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import std_msgs
+import datetime
 
 sys.path.append("/home/telescopio/ros/src/necst-core/scripts")
 import core_controller
