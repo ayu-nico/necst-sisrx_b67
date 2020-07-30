@@ -6,7 +6,7 @@
         <param name="~host" value="192.168.100.178" />
         <param name="~port" value="8000" />
 
-    <remap from = '/dev/tpg/__port__/press' to = '/dev/tpg/ip_192_168_100_178/pressure'/>
+    <remap from = '/dev/tpg/__ip__/pressure' to = '/dev/tpg/ip_192_168_100_178/pressure'/>
 
   </node>
 
