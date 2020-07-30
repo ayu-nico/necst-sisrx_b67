@@ -1,4 +1,4 @@
-self.self.file_name# coding:utf_8
+# coding:utf_8
 import sys
 import time
 import pyinterface
@@ -19,64 +19,70 @@ from std_msgs.msg import Float64
 
 class sis_iv(object):
 
+
     def __init__(self):
-        self.lsb = rospy.Publisher("/necst/sisrxb67/sis_b6/lsb/v_cmd",Float64,queue_size=1)
-        self.usb = rospy.Publisher("/necst/sisrxb67/sis_b6/usb/v_cmd",Float64,queue_size=1)
+        self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch1",Float64,queue_size=1)
+        self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch1",Float64,self.stock_data1)
+        self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch2",Float64,self.stock_data2)
 
-        date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-        self.file_name = 'sis_iv_b6' + '/' + date + '.necstdb'
-        print(self.file_name)
-        self.logger = core_controller.logger()
+        #self.vol = np.nan
+        #self.cur = np.nan
+        self.path = "/home/telescopio/data_konishi/"
 
-    def measure_lsb(self, initv, interval, repeat):
-        self.lsb.publish(initv)
+        self.t = datetime.datetime.now()
+        self.ut = self.t.strftime("%Y%m%d-%H%M%S")
+
+#データ用意する
+    def stock_data1(self,vol):
+        self.vol = vol.data
+
+    def stock_data2(self,cur):
+        self.cur = cur.data
+
+#データ保存
+    def measure(self, initv, interval, repeat):
+        self.da_all=[]
+        self.pub1.publish(initv/3)
         time.sleep(3)
-        self.logger.start(self.file_name)
         for i in range(repeat+1):
-            vol = (initv+interval*i)
-            self.lsb.publish(vol)
+            da = []
+            in_vol = (initv+interval*i)/3
+            data = in_vol
+            self.pub1.publish(in_vol)
             time.sleep(0.3)
-        self.logger.stop()
-        self.lsb.publish(0)
+            da.append(self.vol/0.2)
+            da.append(self.cur/0.002)
+            print(da)
+            self.da_all.append(da)
+        self.pub1.publish(0)
+        #print((da_all[-1][1]-da_all[0][1])/(da_all[-1][0]-da_all[0][0])) 傾き
+        np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
 
-    def measure_usb(self, initv, interval, repeat):
-        self.usb.publish(initv)
-        time.sleep(3)
-        self.logger.start(self.file_name)
-        for i in range(repeat+1):
-            vol = (initv+interval*i)
-            self.usb.publish(vol)
-            time.sleep(0.3)
-        self.logger.stop()
-        self.usb.publish(0)
+#データプロット
 
-    def measure_2sb(self, initv, interval, repeat):
-        self.lsb.publish(initv)
-        self.usb.publish(initv)
-        time.sleep(3)
-        self.logger.start(self.file_name)
-        for i in range(repeat+1):
-            vol = (initv+interval*i)
-            self.lsb.publish(vol)
-            self.usb.publish(vol)
-            time.sleep(0.3)
-        self.logger.stop()
-        self.lsb.publish(0)
-        self.usb.publish(0)
+    def plot(self):
+        da_all = np.array(self.da_all)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.scatter(da_all[:,0], da_all[:,1], marker="o", color="red")
+        ax.set_xlabel("voltage[mV]")
+        ax.set_ylabel("current[uA]")
+        ax.set_title("SIS-IV")
+        ax.grid(True)
+        plt.savefig(self.path + "sis_iv_{}.png".format(self.ut))
+        plt.show()
 
 if __name__ == "__main__" :
     rospy.init_node("measure")
-
-    mode = "lsb"
+    ctrl = sis_iv()
     initv = -8
     interval = 0.05
-    end_v = 8
-
-    repeat = (end_v-initv)/interval
-    ctrl = sis_iv()
-    if mode == "lsb":
-        ctrl.measure_lsb(initv,interval,repeat)
-    elif mode == "usb":
-        ctrl.measure_usb(initv,interval,repeat)
-    elif mode == "2sb":
-        ctrl.measure_2sb(initv,interval,repeat)
+    repeat = 320
+    date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
+    file_name = 'sis_iv_b6' + '/' + date + '.necstdb'
+    print(file_name)
+    logger = core_controller.logger()
+    logger.start(file_name)
+    ctrl.measure(initv,interval,repeat)
+    logger.stop()
+    ctrl.plot()

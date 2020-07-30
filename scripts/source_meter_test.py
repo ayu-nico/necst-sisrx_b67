@@ -20,21 +20,24 @@ class source(object):
         self.com = ogameasure.gpib_prologix(self.host, self.gpibport)
         #print(host)
         #print(gpibport)
-
+        self.com.open()
         self.pub_i = rospy.Publisher("/necst/sis/b7/i", Float64, queue_size=1)
         self.pub_v = rospy.Publisher("/necst/sis/b7/v", Float64, queue_size=1)
-
+        time.sleep(3)
 
 
     def iv_publisher(self,ch=0):
         while not rospy.is_shutdown():
             try:
-                self.com.open()
-                data = self.com.send(":READ?").strip().split(',')
-                self.pub_v.publish(data[0])
-                self.pub_i.publish(data[1])
-                self.com.close()
-                time.sleep(1)
+                #self.com.open()
+                self.com.send(":READ?")
+                time.sleep(0.5)
+                data = self.com.readline().strip().split(",")
+                print(data)
+                self.pub_v.publish(float(data[0]))
+                self.pub_i.publish(float(data[1]))
+                #self.com.close()
+                time.sleep(0.5)
             except:
                 pass
             continue
