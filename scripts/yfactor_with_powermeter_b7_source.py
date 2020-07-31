@@ -2,6 +2,7 @@
 
 name = "sis_iv_b7"
 
+import tqdm
 import time
 import datetime
 import sys
@@ -37,13 +38,13 @@ class sis_b7_iv(object):
         logger = core_controller.logger()
         logger.start(file_name)
 
-        for i in range(repeat+1):
+        for i in  tqdm.tqdm(range(repeat+1)):
             self.com.send(":SOUR:VOLT:LEV " + str((initv+interval*i)/1000))
-            time.sleep(0.5)
+            time.sleep(1)
             self.com.send(":READ?")
             time.sleep(0.3)
             data = self.com.readline().strip().split(",")
-            print(data)
+            #print(data)
             self.pub_v.publish(float(data[0]))
             self.pub_i.publish(float(data[1]))
             time.sleep(0.3)
