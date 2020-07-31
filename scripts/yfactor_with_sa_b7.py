@@ -6,6 +6,7 @@ name = "yfactorspecana"
 import time
 import sys
 import ogameasure
+import datetime
 import rospy
 import threading
 sys.path.append("/home/telescopio/ros/src/necst-core/scripts")
