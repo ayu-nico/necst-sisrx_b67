@@ -16,7 +16,7 @@ gpibport = 2
 com = ogameasure.gpib_prologix(host, gpibport)
 
 com.open()
-tume.sleep(2)
+time.sleep(2)
 
 date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
 file_name = 'yfactor_with_sa_b7' + '/' + date + '.necstdb'
