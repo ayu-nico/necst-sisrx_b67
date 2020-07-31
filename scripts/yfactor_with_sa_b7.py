@@ -11,11 +11,11 @@ import threading
 sys.path.append("/home/telescopio/ros/src/necst-core/scripts")
 import core_controller
 
-self.host = "192.168.100.45"
-self.gpibport = 2
-self.com = ogameasure.gpib_prologix(self.host, self.gpibport)
+host = "192.168.100.45"
+gpibport = 2
+com = ogameasure.gpib_prologix(host, gpibport)
 
-self.com.open()
+com.open()
 tume.sleep(2)
 
 date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
@@ -26,7 +26,7 @@ logger = core_controller.logger()
 v  = -1.9
 meas_t = 30
 
-self.com.send(":SOUR:VOLT:LEV " + str(v/1000))
+com.send(":SOUR:VOLT:LEV " + str(v/1000))
 time.sleep(2)
 logger.start(file_name)
 time.sleep(meas_t)
