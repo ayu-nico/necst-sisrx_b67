@@ -21,9 +21,9 @@ class sis_iv(object):
 
 
     def __init__(self):
-        self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch3",Float64,queue_size=1)
-        self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch1",Float64,self.stock_data1)
-        self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch2",Float64,self.stock_data2)
+        self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch2",Float64,queue_size=1)
+        self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch3",Float64,self.stock_data1)
+        self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch4",Float64,self.stock_data2)
         self.sub3 = rospy.Subscriber("/dev/cpz3177/rsw0/ch10",Float64,self.stock_data3)
 
         #self.vol = np.nan
@@ -84,9 +84,9 @@ class sis_iv(object):
 if __name__ == "__main__" :
     rospy.init_node("measure")
     ctrl = sis_iv()
-    initv = -6
+    initv = -8
     interval = 0.05
-    repeat = 240
+    repeat = 320
     date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
     file_name = "yfactor_with_powermeter_b6" + '/' + date + '.necstdb'
     print(file_name)

@@ -25,7 +25,7 @@ print(file_name)
 logger = core_controller.logger()
 
 v  = -1.9
-meas_t = 30
+meas_t = 350
 
 rospy.init_node(name)
 com.send(":SOUR:VOLT:LEV " + str(v/1000))

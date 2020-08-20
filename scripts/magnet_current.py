@@ -38,7 +38,7 @@ class magnet_current(object):
         for i in range(repeat+1):
             in_vol = (initv+interval*i)/100
             self.pub1.publish(in_vol)
-            time.sleep(1)
+            time.sleep(2)
             print("\r {0}% [{1}]".format(int(i/repeat*100),int(i/repeat)*"#"),end="")
         self.pub1.publish(0)
 
@@ -49,15 +49,15 @@ if __name__ == "__main__" :
     rospy.init_node("measure")
     initv = 0
     interval = 0.05
-    repeat = 400
-    offset = 0.5
+    repeat = 500
+    #offset = 0.5
     ctrl = magnet_current()
     date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
     file_name = "magnet_current" + '/' + date + '.necstdb'
     print(file_name)
     logger = core_controller.logger()
-    ctrl.sis_set_v(offset)
+    #ctrl.sis_set_v(offset)
     logger.start(file_name)
     ctrl.measure(initv,interval,repeat)
-    time.sleep(10)
+    time.sleep(1)
     logger.stop()
