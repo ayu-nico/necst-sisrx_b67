@@ -1,9 +1,15 @@
 <launch>
-  <node name = "sis_power_reader"
+  <node name = "sis_power_reader_ch1"
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
            value = "$(find necst-sisrx_b67)/node_conf/sis_power_ch1_reader.conf" />
+  </node>
+  <node name = "sis_power_reader_ch2"
+        type = "relay.py"
+        pkg = "necst-sisrx_b67">
+    <param name = "config_file"
+           value = "$(find necst-sisrx_b67)/node_conf/sis_power_ch2_reader.conf" />
   </node>
   <node name = "sis_b6_v_writer"
         type = "relay.py"
