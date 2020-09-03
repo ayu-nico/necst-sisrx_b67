@@ -1,8 +1,8 @@
 <launch>
 
   <node pkg = "necst-sisrx_b67"
-        name = "source_meter_test"
-        type = "source_meter_test.py">
+        name = "source_meter"
+        type = "source_meter.py">
 
   </node>
 

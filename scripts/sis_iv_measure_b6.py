@@ -21,40 +21,63 @@ class sis_iv(object):
 
 
     def __init__(self):
-        self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch1",Float64,queue_size=1)
-        self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch1",Float64,self.stock_data1)
-        self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch2",Float64,self.stock_data2)
+        self.pub1 = rospy.Publisher('/necst/sisrxb67/sis_b6/lsb/v_cmd',Float64,queue_size=1)
+        self.pub2 = rospy.Publisher('/necst/sisrxb67/sis_b6/usb/v_cmd',Float64,queue_size=1)
 
-        #self.vol = np.nan
-        #self.cur = np.nan
-        self.path = "/home/telescopio/data_konishi/"
+        self.sub1 = rospy.Subscriber('/necst/sisrxb67/sis_b6/lsb/i',Float64,self.stock_data1)
+        self.sub2 = rospy.Subscriber('/necst/sisrxb67/sis_b6/lsb/v',Float64,self.stock_data2)
+        self.sub3 = rospy.Subscriber('/necst/sisrxb67/sis_b6/usb/i',Float64,self.stock_data3)
+        self.sub4 = rospy.Subscriber('/necst/sisrxb67/sis_b6/usb/v',Float64,self.stock_data4)
 
         self.t = datetime.datetime.now()
         self.ut = self.t.strftime("%Y%m%d-%H%M%S")
 
 #データ用意する
     def stock_data1(self,vol):
-        self.vol = vol.data
+        self.vol1 = vol.data
 
     def stock_data2(self,cur):
-        self.cur = cur.data
+        self.cur1 = cur.data
+
+    def stock_data3(self,vol):
+        self.vol2 = vol.data
+
+    def stock_data4(self,cur):
+        self.cur2 = cur.data
 
 #データ保存
     def measure(self, initv, interval, repeat):
-        self.da_all=[]
-        self.pub1.publish(initv/3)
+
+        date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
+        file_name = 'sis_iv_b6' + '/' + date + '.necstdb'
+        print(file_name)
+        logger = core_controller.logger()
+        self.da_all1=[]
+        self.da_all2=[]
+        self.pub1.publish(initv)
+        self.pub2.publish(initv)
         time.sleep(3)
+        logger.start(file_name)
+
         for i in range(repeat+1):
-            da = []
-            in_vol = (initv+interval*i)/3
-            data = in_vol
-            self.pub1.publish(in_vol)
+            da1 = []
+            da2 = []
+            in_vol = (initv+interval*i)
+
+            self.pub1.publish(in_vol1)
+            self.pub2.publish(in_vol2)
             time.sleep(0.3)
-            da.append(self.vol/0.2)
-            da.append(self.cur/0.002)
-            print(da)
-            self.da_all.append(da)
+            da1.append(self.vol1)
+            da1.append(self.cur1)
+            da2.append(self.vol2)
+            da2.append(self.cur2)
+            self.da_all1.append(da1)
+            self.da_all2.append(da2)
+        time.sleep(1)
+        logger.stop()
+
         self.pub1.publish(0)
+        self.pub2.publish(0)
         #print((da_all[-1][1]-da_all[0][1])/(da_all[-1][0]-da_all[0][0])) 傾き
         np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
 
@@ -75,14 +98,9 @@ class sis_iv(object):
 if __name__ == "__main__" :
     rospy.init_node("measure")
     ctrl = sis_iv()
-    initv = -8
-    interval = 0.05
+    initv = -8 #mV
+    interval = 0.05 #mV
     repeat = 320
-    date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-    file_name = 'sis_iv_b6' + '/' + date + '.necstdb'
-    print(file_name)
-    logger = core_controller.logger()
-    logger.start(file_name)
+
     ctrl.measure(initv,interval,repeat)
-    logger.stop()
     ctrl.plot()

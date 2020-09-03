@@ -1,90 +1,64 @@
-# coding:utf_8
-import sys
+#! /usr/bin/env python3
+
+name = "sis_iv_b7"
+
 import time
-import pyinterface
-import threading
-import rospy
-import os,datetime
-import numpy as np
-import matplotlib.pyplot as plt
-import std_msgs
 import datetime
+import sys
+import ogameasure
+import rospy
+import threading
+from std_msgs.msg import Float64
+from std_msgs.msg import String
+from std_msgs.msg import Int32
 
 sys.path.append("/home/telescopio/ros/src/necst-core/scripts")
 import core_controller
 
-from std_msgs.msg import String
-from std_msgs.msg import Int32
-from std_msgs.msg import Float64
-
-
-class sis_iv(object):
-
-
+class sis_b7_iv(object):
     def __init__(self):
-        self.pub1 = rospy.Publisher("/dev/cpz340816/rsw0/ch2",Float64,queue_size=1)
-        self.sub1 = rospy.Subscriber("/dev/cpz3177/rsw0/ch3",Float64,self.stock_data1)
-        self.sub2 = rospy.Subscriber("/dev/cpz3177/rsw0/ch4",Float64,self.stock_data2)
-
-        #self.vol = np.nan
-        #self.cur = np.nan
-        self.path = "/home/telescopio/data_konishi/"
-
-        self.t = datetime.datetime.now()
-        self.ut = self.t.strftime("%Y%m%d-%H%M%S")
-
-#データ用意する
-    def stock_data1(self,vol):
-        self.vol = vol.data
-
-    def stock_data2(self,cur):
-        self.cur = cur.data
-
-#データ保存
-    def measure(self, initv, interval, repeat):
-        self.da_all=[]
-        self.pub1.publish(initv/3)
+        self.host = "192.168.100.45"
+        self.gpibport = 2
+        self.com = ogameasure.gpib_prologix(self.host, self.gpibport)
+        #print(host)
+        #print(gpibport)
+        self.com.open()
+        self.pub_i = rospy.Publisher('/necst/sisrxb67/sis_b7/i', Float64, queue_size=1)
+        self.pub_v = rospy.Publisher('/necst/sisrxb67/sis_b7/v', Float64, queue_size=1)
         time.sleep(3)
+
+
+    def iv_measure(self,initv,interval,repeat):
+        self.com.send(":SOUR:VOLT:LEV " + str(initv/1000))
+        time.sleep(1)
+        date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
+        file_name = 'sis_iv_b7' + '/' + date + '.necstdb'
+        print(file_name)
+        logger = core_controller.logger()
+        logger.start(file_name)
+
         for i in range(repeat+1):
-            da = []
-            in_vol = (initv+interval*i)/3
-            data = in_vol
-            self.pub1.publish(in_vol)
+            self.com.send(":SOUR:VOLT:LEV " + str((initv+interval*i)/1000))
             time.sleep(0.3)
-            da.append(self.vol/0.2)
-            da.append(self.cur/0.002)
-            print(da)
-            self.da_all.append(da)
-        self.pub1.publish(0)
-        #print((da_all[-1][1]-da_all[0][1])/(da_all[-1][0]-da_all[0][0])) 傾き
-        np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
-
-#データプロット
-
-    def plot(self):
-        da_all = np.array(self.da_all)
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.scatter(da_all[:,0], da_all[:,1], marker="o", color="red")
-        ax.set_xlabel("voltage[mV]")
-        ax.set_ylabel("current[uA]")
-        ax.set_title("SIS-IV")
-        ax.grid(True)
-        plt.savefig(self.path + "sis_iv_{}.png".format(self.ut))
-        plt.show()
+            self.com.send(":READ?")
+            time.sleep(0.3)
+            data = self.com.readline().strip().split(",")
+            print(data)
+            self.pub_v.publish(float(data[0]))
+            self.pub_i.publish(float(data[1]))
+            time.sleep(0.1)
+            continue
+        logger.stop()
 
 
-if __name__ == "__main__" :
-    rospy.init_node("measure")
-    ctrl = sis_iv()
-    initv = -3.0
+if __name__ == '__main__':
+    rospy.init_node(name)
+
+    initv = -3.0 #mV
+    end_v = 3
     interval = 0.05
-    repeat = 120
-    date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
-    file_name = "sis_iv_b7" + '/' + date + '.necstdb'
-    print(file_name)
-    logger = core_controller.logger()
-    logger.start(file_name)
-    ctrl.measure(initv,interval,repeat)
-    logger.stop()
-    ctrl.plot()
+
+    repeat = int((end_v-initv)/interval)
+
+    iv = sis_b7_iv()
+    iv.iv_measure(initv,interval,repeat)

@@ -8,7 +8,7 @@
 
         <param name="~ch_num" value="1" />
 
-    <remap from = '/dev/ma24126a/__port__/power/1' to = '/dev/ma24126a/ttyACM0/power'/>
+    <remap from = '/dev/ma24126a/__port__/1' to = '/dev/ma24126a/ttyACM0/power'/>
     <remap from = '/dev/ma24126a/__port__/zero_set/1' to = '/dev/ma24126a/ttyACM0/zero_set'/>
 
   </node>
