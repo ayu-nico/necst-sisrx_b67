@@ -1,0 +1,19 @@
+<launch>
+  <node pkg="rospkg-pyinterface" name="cpz3177" type="cpz3177.py" required="true" output="screen">
+    <param name="~rate" value="0.001" />
+    <param name="~rsw_id" value="0" />
+    <param name="~all_ch_num" value="6" />
+    <param name="~ave_num" value="100" />
+    <param name="~smpl_freq" value="100" />
+    <param name="~pub_rate" value="0.01" />
+    <param name="~ch_num_li" value="[1,2,3,4,10,11]" />
+    <param name="~single_diff" value="DIFF" />
+    <param name="~ch1" value="{'ch_no':1,'range':'5V'}" />
+    <param name="~ch2" value="{'ch_no':2,'range':'5V'}" />
+    <param name="~ch3" value="{'ch_no':3,'range':'5V'}" />
+    <param name="~ch4" value="{'ch_no':4,'range':'5V'}" />
+    <param name="~ch10" value="{'ch_no':10,'range':'5V'}" />
+    <param name="~ch11" value="{'ch_no':11,'range':'5V'}" />
+
+  </node>
+</launch>

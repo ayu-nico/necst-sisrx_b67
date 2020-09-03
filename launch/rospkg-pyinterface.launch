@@ -1,0 +1,6 @@
+<launch>
+
+    <include file="$(find necst-sisrx_b67)/launch/cpz3177.launch" />
+    <include file="$(find necst-sisrx_b67)/launch/cpz340816.launch" />
+
+</launch>
