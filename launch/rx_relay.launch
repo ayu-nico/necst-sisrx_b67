@@ -45,7 +45,7 @@
         type = "relay.py"
         pkg = "necst-sisrx_b67">
     <param name = "config_file"
-           value = "$(find necst-sisrx_b67)/node_conf/sis_b7_usb_i_reader.conf" />
+           value = "$(find necst-sisrx_b67)/node_conf/sis_b6_usb_i_reader.conf" />
   </node>
   <node name = "sis_b6_m_writer"
         type = "relay.py"
