@@ -21,8 +21,8 @@ class source(object):
         #print(host)
         #print(gpibport)
         self.com.open()
-        self.pub_i = rospy.Publisher("/necst/sis/b7/i", Float64, queue_size=1)
-        self.pub_v = rospy.Publisher("/necst/sis/b7/v", Float64, queue_size=1)
+        self.pub_i = rospy.Publisher("/necst/sisrxb67/sis_b7/i", Float64, queue_size=1)
+        self.pub_v = rospy.Publisher("/necst/sisrxb67/sis_b7/v", Float64, queue_size=1)
         time.sleep(3)
 
 
