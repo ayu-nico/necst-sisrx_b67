@@ -62,11 +62,12 @@ class sis_iv(object):
         for i in range(repeat+1):
             da1 = []
             da2 = []
-            in_vol = (initv+interval*i)
+            in_vol1 = (initv+interval*i)
+            in_vol2 = (initv+interval*i)
 
             self.pub1.publish(in_vol1)
             self.pub2.publish(in_vol2)
-            time.sleep(0.3)
+            time.sleep(1)
             da1.append(self.vol1)
             da1.append(self.cur1)
             da2.append(self.vol2)
@@ -75,7 +76,7 @@ class sis_iv(object):
             self.da_all2.append(da2)
         time.sleep(1)
         logger.stop()
-
+        time.sleep(2)
         self.pub1.publish(0)
         self.pub2.publish(0)
         #print((da_all[-1][1]-da_all[0][1])/(da_all[-1][0]-da_all[0][0])) 傾き
@@ -84,10 +85,12 @@ class sis_iv(object):
 #データプロット
 
     def plot(self):
-        da_all = np.array(self.da_all)
+        da_all1 = np.array(self.da_all1)
+        da_all2 = np.array(self.da_all2)
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.scatter(da_all[:,0], da_all[:,1], marker="o", color="red")
+        ax.scatter(da_all1[:,0], da_all1[:,1], marker="o", color="red")
+        ax.scatter(da_all2[:,0], da_all2[:,1], marker="o", color="red")
         ax.set_xlabel("voltage[mV]")
         ax.set_ylabel("current[uA]")
         ax.set_title("SIS-IV")

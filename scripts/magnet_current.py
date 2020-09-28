@@ -48,6 +48,6 @@ if __name__ == "__main__" :
     rospy.init_node("measure")
     initv = 0
     interval = 0.05
-    repeat = 500
+    repeat = 600
     ctrl = magnet_current()
     ctrl.measure(initv,interval,repeat)
