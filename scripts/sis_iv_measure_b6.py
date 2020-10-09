@@ -106,4 +106,4 @@ if __name__ == "__main__" :
     repeat = 320
 
     ctrl.measure(initv,interval,repeat)
-    ctrl.plot()
+    #ctrl.plot()
