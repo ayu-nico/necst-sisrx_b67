@@ -12,7 +12,7 @@ import rospy
 import std_msgs.msg
 import ogameasure
 
-host = "192.168.100.45"
+host = "192.168.100.46"
 gpibport = 2
 com = ogameasure.gpib_prologix(host, gpibport)
 com.open()

@@ -17,7 +17,7 @@ import core_controller
 
 class sis_b7_iv(object):
     def __init__(self):
-        self.host = "192.168.100.45"
+        self.host = "192.168.100.46"
         self.gpibport = 2
         self.com = ogameasure.gpib_prologix(self.host, self.gpibport)
         #print(host)
@@ -30,7 +30,8 @@ class sis_b7_iv(object):
 
     def iv_measure(self,initv,interval,repeat):
         self.com.send(":SOUR:VOLT:LEV " + str(initv/1000))
-        time.sleep(1)
+        #time.sleep(1)
+        #time.sleep(0.5)
         date = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
         file_name = 'sis_iv_b7' + '/' + date + '.necstdb'
         print(file_name)
@@ -56,7 +57,7 @@ if __name__ == '__main__':
 
     initv = -3.0 #mV
     end_v = 3
-    interval = 0.05
+    interval = 0.025
 
     repeat = int((end_v-initv)/interval)
 

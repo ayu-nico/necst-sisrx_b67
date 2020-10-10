@@ -15,7 +15,7 @@ import errno
 
 class source(object):
     def __init__(self):
-        self.host = "192.168.100.45"
+        self.host = "192.168.100.46"
         self.gpibport = 2
         self.com = ogameasure.gpib_prologix(self.host, self.gpibport)
         #print(host)
