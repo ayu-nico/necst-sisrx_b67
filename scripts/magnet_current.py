@@ -46,8 +46,8 @@ class magnet_current(object):
 
 if __name__ == "__main__" :
     rospy.init_node("measure")
-    initv = 30
+    initv = 0
     interval = 0.05
-    repeat = 200
+    repeat = 600
     ctrl = magnet_current()
     ctrl.measure(initv,interval,repeat)
