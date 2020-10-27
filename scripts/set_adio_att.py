@@ -41,7 +41,7 @@ def set_att_ch4(cmd):
 
 
 rospy.init_node(name)
-
+time.sleep(1)
 set_att_ch1(att1)
 set_att_ch2(att2)
 set_att_ch3(att3)
