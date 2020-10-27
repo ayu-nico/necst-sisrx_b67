@@ -132,6 +132,9 @@ class topic_monitor_gspread(object):
             self.ws.update_cells(ds)
 
         except:
+            t = datetime.datetime.now()
+            update_t = t.strftime("%Y/%m/%d-%H:%M:%S")
+            print(update_t)
             print("something error during update value")
 
     def regist_gspread(self):
