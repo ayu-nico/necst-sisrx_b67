@@ -2,7 +2,7 @@
   <node pkg = "rospkg-ogameasure"
         name = "fsw0020_rhcp"
         type = "fsw0020.py"
-        machine="opurec">
+        >
     <param name="~host" value="192.168.100.54" />
     <param name="~port" value="10001" />
     <remap from = '/dev/fsw0020/__IP__/f_cmd' to = '/dev/fsw0020/ip_192_168_100_54/freq_cmd'/>
@@ -15,7 +15,7 @@
   <node pkg = "rospkg-ogameasure"
         name = "fsw0020_lhcp"
         type = "fsw0020.py"
-        machine="opurec">
+        >
     <param name="~host" value="192.168.100.53" />
     <param name="~port" value="10001" />
     <remap from = '/dev/fsw0020/__IP__/f_cmd' to = '/dev/fsw0020/ip_192_168_100_53/freq_cmd'/>
