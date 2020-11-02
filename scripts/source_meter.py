@@ -32,8 +32,8 @@ class source(object):
             time.sleep(0.3)
             data = self.com.readline().strip().split(",")
             print(data)
-            self.pub_v.publish(float(data[0]))
-            self.pub_i.publish(float(data[1]))
+            self.pub_v.publish(float(data[0])*1000)
+            self.pub_i.publish(float(data[1])*1000000)
             time.sleep(0.3)
             continue
 

@@ -50,7 +50,7 @@ class sis_b7_iv(object):
             time.sleep(0.1)
             continue
         logger.stop()
-
+        self.com.send(":SOUR:VOLT:LEV " + str(0))
 
 if __name__ == '__main__':
     rospy.init_node(name)
