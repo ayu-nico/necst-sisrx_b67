@@ -80,7 +80,7 @@ class sis_iv(object):
         self.pub1.publish(0)
         self.pub2.publish(0)
         #print((da_all[-1][1]-da_all[0][1])/(da_all[-1][0]-da_all[0][0])) 傾き
-        np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
+        #np.savetxt(self.path + "sis_iv_{}.txt".format(self.ut), np.array(self.da_all), delimiter=" ")
 
 #データプロット
 

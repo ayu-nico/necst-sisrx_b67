@@ -6,8 +6,8 @@ import std_msgs.msg
 name = "sis_b6_set_v"
 rospy.init_node(name)
 
-sis_set1 = rospy.Publisher("/dev/cpz340816/rsw0/ch1", std_msgs.msg.Float64, queue_size=1)
-sis_set2 = rospy.Publisher("/dev/cpz340816/rsw0/ch2", std_msgs.msg.Float64, queue_size=1)
+sis_set1 = rospy.Publisher("/dev/cpz340816/rsw0/ch3", std_msgs.msg.Float64, queue_size=1)
+sis_set2 = rospy.Publisher("/dev/cpz340816/rsw0/ch4", std_msgs.msg.Float64, queue_size=1)
 
 lsb_v = float(input("How mush voltage for lsb?? = [mV]"))
 usb_v = float(input("How mush voltage for usb?? = [mV]"))

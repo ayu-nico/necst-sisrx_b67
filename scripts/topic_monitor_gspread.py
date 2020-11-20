@@ -47,7 +47,7 @@ class topic_monitor_gspread(object):
         rospy.Subscriber("/dev/218/temp/ch2",std_msgs.msg.Float64,self.dewar_temp,callback_args=2)
         rospy.Subscriber("/dev/218/temp/ch3",std_msgs.msg.Float64,self.dewar_temp,callback_args=3)
         rospy.Subscriber("/dev/218/temp/ch4",std_msgs.msg.Float64,self.dewar_temp,callback_args=4)
-        rospy.Subscriber("/dev/tpg/pressure",std_msgs.msg.Float64,self.dewar_press)
+        rospy.Subscriber("/dev/tpg/ip_192_168_100_178/pressure",std_msgs.msg.Float64,self.dewar_press)
 
         #sisi v
         #rospy.Subscriber("/dev/cpz340816/rsw0/ch1",std_msgs.msg.Float64,self.b6_sis,callback_args=1)
